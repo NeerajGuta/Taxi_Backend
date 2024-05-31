@@ -62,9 +62,9 @@ const driverAuthSchema = mongoose.Schema(
       default: "offline",
       enum: ["offline", "online"],
     },
-    blockstatus: {
-      type: Boolean,
-      default: false,
+    checking: {
+      type: String,
+      default: "unapproved",
     },
     profilestatus: {
       type: Boolean,

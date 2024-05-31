@@ -45,7 +45,7 @@ class VehicleTypes {
       if (!getVehicleType) {
         return res.status(400).json({ message: "Data not found" });
       }
-      return res.status(201).json({ success: data, getVehicleType });
+      return res.status(201).json({ success: getVehicleType });
     } catch (error) {
       return res.status(500).json({ error: "Internal server errror" });
     }
@@ -60,7 +60,7 @@ class VehicleTypes {
       if (!removeVehicleType) {
         return res.status(400).json({ message: "Data not found" });
       }
-      return res.status(201).json({ success: data, removeVehicleType });
+      return res.status(201).json({ success: removeVehicleType });
     } catch (error) {
       return res.status(500).json({ error: "Internal server errror" });
     }

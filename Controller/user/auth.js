@@ -25,13 +25,14 @@ class Authentication {
   //   Login with otp==========================
   async loginWithOtp(req, res) {
     const { phoneNumber } = req.body;
+    console.log(phoneNumber);
     try {
       const isPhonePresent = await userModel.create({
         phoneNumber: phoneNumber,
       });
-      //   if (!isPhonePresent) {
-      //     return res.status(400).json({ error: "Phone no is not registered..." });
-      //   }
+      if (!isPhonePresent) {
+        return res.status(400).json({ error: "Phone no is not registered..." });
+      }
 
       let otp = (Math.floor(Math.random() * 1000000) + 1000000)
         .toString()

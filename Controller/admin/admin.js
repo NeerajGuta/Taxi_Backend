@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const adminModel = require("./models/Admin");
+const adminModel = require("../../Model/admin/admin");
 
 class Adminauth {
   async postsignup(req, res) {
@@ -32,7 +32,7 @@ class Adminauth {
       }
       const admin = await adminModel.findOne({ email });
       if (!admin) {
-        return res.status(404).json({ message: "Admin not found" });
+        return res.status(401).json({ message: "Admin not found" });
       }
       const passwordMatch = await bcrypt.compare(password, admin.password);
       if (!passwordMatch) {

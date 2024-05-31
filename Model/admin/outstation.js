@@ -47,6 +47,12 @@ const outStationSchema = mongoose.Schema(
     servicecharge: {
       type: Number,
     },
+    city: {
+      type: String,
+    },
+    tollcharge: {
+      type: Number,
+    },
   },
   { timestamps: true }
 );

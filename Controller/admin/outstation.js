@@ -15,10 +15,14 @@ class outStationrate {
         ac,
         totalseat,
         bookingfee,
+        parkingcharge,
         gst,
         cancellationcharge,
         servicecharge,
+        tollcharge,
+        city,
       } = req.body;
+
       const file = req.files[0].filename;
 
       const adddata = await outstationModel.create({
@@ -37,8 +41,10 @@ class outStationrate {
         gst,
         cancellationcharge,
         servicecharge,
+        tollcharge,
+        city,
       });
-      console.log(adddata);
+
       if (adddata) {
         return res
           .status(200)
@@ -68,6 +74,8 @@ class outStationrate {
         gst,
         cancellationcharge,
         servicecharge,
+        tollcharge,
+        city,
       } = req.body;
 
       let updateObj = {};
@@ -113,6 +121,12 @@ class outStationrate {
       if (servicecharge) {
         updateObj["servicecharge"] = servicecharge;
       }
+      if (tollcharge) {
+        updateObj["tollcharge"] = tollcharge;
+      }
+      if (city) {
+        updateObj["city"] = city;
+      }
       if (req.files && req.files.length != 0) {
         let arr = req.files;
         let i;
@@ -130,7 +144,7 @@ class outStationrate {
       if (!data) {
         return res.status(401).json({ error: "Data is not found !!!" });
       }
-      return res.status(201).json({ message: "Data updated successfully !!!" });
+      return res.status(200).json({ message: "Data updated successfully !!!" });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }
@@ -153,9 +167,11 @@ class outStationrate {
       let id = req.params.id;
       let removedata = await outstationModel.findOneAndDelete({ _id: id });
       if (!removedata) {
-        return res.status(401).json({ message: "Data is not found !!!" });
+        return res.status(401).json({ error: "Data is not found !!!" });
       }
-      return res.status(201).json({ success: removedata, removedata });
+      return res
+        .status(200)
+        .json({ success: "Data Deleted Successfully", removedata });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }

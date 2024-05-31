@@ -21,5 +21,8 @@ router.get("/getdriver/:id", driverAuthController.getDriverById);
 router.put("/updatedriver", upload.any(), driverAuthController.editDriver);
 router.put("/updatepassword", driverAuthController.updatepassword);
 router.delete("/deletedriver/:id", driverAuthController.removedriver);
+router.get("/status/:id", driverAuthController.statuscheck);
+router.get("/signout/:id", driverAuthController.getsignout);
+router.put("/approved/", driverAuthController.Approverdriver);
 
 module.exports = router;

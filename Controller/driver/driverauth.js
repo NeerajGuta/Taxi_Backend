@@ -132,14 +132,15 @@ class driverAuthentication {
 
   async getDriverById(req, res) {
     try {
-      let id = req.params.id;
-      const data = await driverAuthModel.find({ _id: id });
+      const id = req.params.id;
+      const data = await driverAuthModel.findOne({ _id: id });
       if (!data) {
-        return res.status(401).json({ message: "Driver Id not found" });
+        return res.status(404).json({ message: "Driver Id not found" });
       }
-      return res.status(201).json({ success: data });
+      return res.status(200).json({ success: data });
     } catch (error) {
-      return res.status(500).json({ error: "enternal server error !!!" });
+      console.error(`Error fetching driver with id ${req.params.id}:`, error);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
   async editDriver(req, res) {
@@ -273,6 +274,65 @@ class driverAuthentication {
       return res.status(201).json({ message: "Data is delete Successfully" });
     } catch (error) {
       return res.status(500).json({ message: "Internal server error !!!" });
+    }
+  }
+  async statuscheck(req, res) {
+    let id = req.params.id;
+    try {
+      const data = await driverAuthModel.findOne({ _id: id });
+      if (!data) {
+        return res.status(403).json({
+          error: "Cannot able to find the user",
+        });
+      } else if (data.status === "online") {
+        return res.json({ success: "user online" });
+      } else {
+        return res.status(403).json({ success: "user offline" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async getsignout(req, res) {
+    let id = req.params.id;
+    try {
+      const data = await driverAuthModel.findOneAndUpdate(
+        { _id: id },
+        { status: "offline" }
+      );
+      if (!data) {
+        return res.status(403).json({
+          error: "Cannot able to find the user",
+        });
+      } else {
+        return res.json({ success: "Sign Out Successful" });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async Approverdriver(req, res) {
+    const { id } = req.body;
+    try {
+      const driver = await driverAuthModel.findById({ _id: id });
+
+      if (driver.checking === "unapproved") {
+        await driverAuthModel.findByIdAndUpdate(
+          { _id: driver._id },
+          { $set: { checking: "approved" } },
+          { new: true }
+        );
+        return res.status(200).json({ success: "User Approved..." });
+      } else {
+        await driverAuthModel.findByIdAndUpdate(
+          { _id: driver._id },
+          { $set: { checking: "unapproved" } },
+          { new: true }
+        );
+        return res.status(200).json({ success: "User Unapproved..." });
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

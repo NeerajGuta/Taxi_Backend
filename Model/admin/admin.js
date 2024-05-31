@@ -7,7 +7,7 @@ const adminSchema = mongoose.Schema(
       match: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
     },
     password: {
-      type: Number,
+      type: String,
     },
     status: {
       type: String,

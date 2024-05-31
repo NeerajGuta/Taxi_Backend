@@ -16,7 +16,8 @@ class localStationrate {
         cancellationcharge,
         servicecharge,
       } = req.body;
-      const file = req.files.filename;
+
+      const file = req.files[0]?.filename;
 
       // Upload the file to Cloudinary and obtain the URL
       // const cloudinaryResult = await uploadFile(file);
@@ -61,7 +62,16 @@ class localStationrate {
         cancellationcharge,
         servicecharge,
       } = req.body;
-
+      console.log(
+        userid,
+        vehicleType,
+        perkmfare,
+        perhrfare,
+        onewaydriverallowance,
+        onewaynightwayallowance,
+        totalseat,
+        ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+      );
       let updateObj = {};
       if (vehicleType) {
         updateObj["vehicleType"] = vehicleType;
@@ -73,7 +83,7 @@ class localStationrate {
         updateObj["perhrfare"] = perhrfare;
       }
       if (onewaydriverallowance) {
-        update["onewaydriverallowance"] = onewaydriverallowance;
+        updateObj["onewaydriverallowance"] = onewaydriverallowance;
       }
       if (onewaynightwayallowance) {
         updateObj["onewaynightwayallowance"] = onewaynightwayallowance;
@@ -110,7 +120,7 @@ class localStationrate {
       if (!data) {
         return res.status(401).json({ error: "Data is not found !!!" });
       }
-      return res.status(201).json({ message: "Data updated successfully !!!" });
+      return res.status(200).json({ message: "Data updated successfully !!!" });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }
@@ -122,7 +132,7 @@ class localStationrate {
       if (!data) {
         return res.status(401).json({ message: "Data is not found !!!" });
       }
-      return res.status(201).json({ success: data });
+      return res.status(200).json({ success: data });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }
@@ -133,9 +143,9 @@ class localStationrate {
       let id = req.params.id;
       let removedata = await localstationModel.findOneAndDelete({ _id: id });
       if (!removedata) {
-        return res.status(401).json({ message: "Data is not found !!!" });
+        return res.status(401).json({ error: "Data is not found !!!" });
       }
-      return res.status(201).json({ success: removedata, removedata });
+      return res.status(200).json({ success: removedata, removedata });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }

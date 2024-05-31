@@ -28,6 +28,7 @@ mongoose
 
 // Route;
 const Userauth = require("./Route/user/auth");
+const Admin = require("./Route/admin/admin");
 const rating = require("./Route/user/rating");
 const vehicletype = require("./Route/admin/vehicletype");
 const localstationrates = require("./Route/admin/localstation");
@@ -42,6 +43,7 @@ const adminnotification1 = require("./Route/admin/usernotification");
 app.use("/api/v1/user", Userauth);
 app.use("/api/v1/user", rating);
 app.use("/api/v1/user", userwalletRouter);
+app.use("/api/v1/admin", Admin);
 app.use("/api/v1/admin", vehicletype);
 app.use("/api/v1/admin", localstationrates);
 app.use("/api/v1/admin", outstationrates);

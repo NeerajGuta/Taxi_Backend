@@ -21,6 +21,9 @@ const AuthSchema = mongoose.Schema(
     address: {
       type: String,
     },
+    fcmToken: {
+      type: String,
+    },
     status: {
       type: String,
       default: "offline",

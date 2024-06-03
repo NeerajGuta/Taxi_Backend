@@ -2,33 +2,58 @@ const userwalletModel = require("../../Model/user/userwallet");
 
 class userWallet {
   async postaddcustomerwallet(req, res) {
-    let { userId, amount } = req.body;
+    const { userId, amount } = req.body;
 
-    if (!amount) {
-      return res.status(500).json({ error: "Enter Amount" });
-    } else {
-      try {
-        let customer = await userwalletModel.findOne({ _id: userId });
-        if (customer) {
-          let updatewallet = await userwalletModel.findOneAndUpdate(
-            { _id: userId },
-            { amount: parseFloat(customer.amount) + parseFloat(amount) }
-          );
-          return res.json({ success: "Money added to wallet", updatewallet });
-        } else {
-          let newcustomerwallet = new userwalletModel({
-            userId,
-            amount,
+    if (!amount || isNaN(amount)) {
+      return res.status(400).json({ error: "Enter a valid Amount" });
+    }
+
+    try {
+      // Convert amount to a number to avoid any type issues
+      const amountNumber = Number(amount);
+      let customer = await userwalletModel.findOne({ userId });
+
+      if (customer) {
+        let updatedAmount = customer.amount + amountNumber;
+
+        // Add the new transaction to the history
+        customer.transactions.push({
+          amount: amountNumber,
+          type: "credit",
+          balanceAfterTransaction: updatedAmount,
+        });
+
+        customer.amount = updatedAmount;
+
+        await customer.save();
+
+        return res.json({ success: "Money added to wallet", wallet: customer });
+      } else {
+        let newcustomerwallet = new userwalletModel({
+          userId,
+          amount: amountNumber,
+          transactions: [
+            {
+              amount: amountNumber,
+              type: "credit",
+              balanceAfterTransaction: amountNumber,
+            },
+          ],
+        });
+
+        let save = await newcustomerwallet.save();
+        if (save) {
+          return res.json({
+            success: "Money added to wallet",
+            wallet: newcustomerwallet,
           });
-
-          let save = newcustomerwallet.save();
-          if (save) {
-            return res.json({ success: "Money added to wallet" });
-          }
+        } else {
+          return res.status(500).json({ error: "Failed to save new wallet" });
         }
-      } catch (err) {
-        console.log(err);
       }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "An error occurred" });
     }
   }
 
@@ -62,24 +87,55 @@ class userWallet {
   async postpaycustomerwallet(req, res) {
     let { userId, amount } = req.body;
 
-    if (!amount) {
-      return res.status(500).json({ error: "Enter Amount" });
-    } else {
-      try {
-        let customer = await userwalletModel.findOne({ _id: userId });
-        if (customer) {
-          let updatewallet = await userwalletModel.findOneAndUpdate(
-            { _id: userId },
-            { amount: parseFloat(customer.amount) - parseFloat(amount) }
-          );
-          return res.json({
-            success: "wallet transaction success",
-            updatewallet,
-          });
+    if (!amount || isNaN(amount)) {
+      return res.status(400).json({ error: "Enter a valid Amount" });
+    }
+
+    try {
+      let customer = await userwalletModel.findOne({ userId });
+      if (customer) {
+        let deductionAmount = parseFloat(amount);
+
+        if (customer.amount < deductionAmount) {
+          return res.status(400).json({ error: "Insufficient funds" });
         }
-      } catch (err) {
-        console.log(err);
+
+        let updatedAmount = parseFloat(customer.amount) - deductionAmount;
+
+        // Add the new transaction to the history
+        customer.transactions.push({
+          amount: -deductionAmount, // Negative amount for deduction
+          type: "debit",
+          balanceAfterTransaction: updatedAmount,
+        });
+
+        customer.amount = updatedAmount;
+
+        await customer.save();
+
+        return res.json({
+          success: "Wallet transaction success",
+          wallet: customer,
+        });
+      } else {
+        return res.status(404).json({ error: "User wallet not found" });
       }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: "An error occurred" });
+    }
+  }
+
+  async getcustomerwalletAll(req, res) {
+    try {
+      let allcustomerwallet = await userwalletModel.find({}).populate("userId");
+      if (allcustomerwallet) {
+        return res.json({ success: allcustomerwallet });
+      } else {
+        return res.json({ customerwallet: { amount: 0 } });
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 }

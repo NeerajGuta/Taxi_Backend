@@ -9,7 +9,7 @@ class VehicleTypes {
       }
       const vehicleNew = await vehicleTypeModel.create({ vehicletype });
       res
-        .status(201)
+        .status(200)
         .json({ message: "Vehicle type created successfully", vehicleNew });
     } catch (error) {
       console.error(error);
@@ -33,7 +33,7 @@ class VehicleTypes {
       if (!data) {
         return res.status(404).json({ message: "Vehicle type not found" });
       }
-      return res.status(201).json({ message: "Updated Successfully", data });
+      return res.status(200).json({ message: "Updated Successfully", data });
     } catch (error) {
       return res.status(201).json({ error: "Internal server error" });
     }
@@ -45,7 +45,7 @@ class VehicleTypes {
       if (!getVehicleType) {
         return res.status(400).json({ message: "Data not found" });
       }
-      return res.status(201).json({ success: getVehicleType });
+      return res.status(200).json({ success: getVehicleType });
     } catch (error) {
       return res.status(500).json({ error: "Internal server errror" });
     }
@@ -60,7 +60,7 @@ class VehicleTypes {
       if (!removeVehicleType) {
         return res.status(400).json({ message: "Data not found" });
       }
-      return res.status(201).json({ success: removeVehicleType });
+      return res.status(200).json({ success: removeVehicleType });
     } catch (error) {
       return res.status(500).json({ error: "Internal server errror" });
     }

@@ -12,5 +12,6 @@ router.get(
   userWalletcontroller.getcustomerwalletdetails
 );
 router.post("/paycustomerwallet", userWalletcontroller.postpaycustomerwallet);
+router.get("/allcustomerwallet", userWalletcontroller.getcustomerwalletAll);
 
 module.exports = router;

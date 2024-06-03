@@ -27,11 +27,14 @@ class Authentication {
     const { phoneNumber } = req.body;
     console.log(phoneNumber);
     try {
-      const isPhonePresent = await userModel.create({
+      const isPhonePresent = await userModel.findOne({
         phoneNumber: phoneNumber,
       });
       if (!isPhonePresent) {
-        return res.status(400).json({ error: "Phone no is not registered..." });
+        await userModel.create({
+          phoneNumber: phoneNumber,
+        });
+        // return res.status(400).json({ error: "Phone no is not registered..." });
       }
 
       let otp = (Math.floor(Math.random() * 1000000) + 1000000)

@@ -5,7 +5,7 @@ const userbookingSchema = new mongoose.Schema(
   {
     userId: {
       type: ObjectId,
-      ref: "user",
+      ref: "Auth",
     },
     driverId: {
       type: ObjectId,

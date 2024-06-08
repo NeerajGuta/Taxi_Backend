@@ -24,6 +24,7 @@ const transactionSchema = new mongoose.Schema({
   amount: Number,
   type: { type: String, enum: ["credit", "debit"] },
   date: { type: Date, default: Date.now },
+  paymentId: { type: String },
   balanceAfterTransaction: Number,
 });
 

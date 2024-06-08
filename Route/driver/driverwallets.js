@@ -11,6 +11,7 @@ router.get(
   "/getdriverwalletdetails/:id",
   driverWalletcontroller.getdriverwalletdetails
 );
-router.post("/paydriverwallet", driverWalletcontroller.postpaydriverwallet);
+router.post("/paydriverwallet", driverWalletcontroller.postpaycustomerwallet);
+router.get("/alldriverwallet", driverWalletcontroller.getdriverwalletAll);
 
 module.exports = router;

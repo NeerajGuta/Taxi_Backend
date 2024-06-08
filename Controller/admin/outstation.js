@@ -21,6 +21,7 @@ class outStationrate {
         servicecharge,
         tollcharge,
         city,
+        triptype,
       } = req.body;
 
       const file = req.files[0].filename;
@@ -43,6 +44,7 @@ class outStationrate {
         servicecharge,
         tollcharge,
         city,
+        triptype,
       });
 
       if (adddata) {
@@ -76,6 +78,7 @@ class outStationrate {
         servicecharge,
         tollcharge,
         city,
+        triptype,
       } = req.body;
 
       let updateObj = {};
@@ -127,6 +130,9 @@ class outStationrate {
       if (city) {
         updateObj["city"] = city;
       }
+      if (triptype) {
+        updateObj["triptype"] = triptype;
+      }
       if (req.files && req.files.length != 0) {
         let arr = req.files;
         let i;
@@ -156,7 +162,7 @@ class outStationrate {
       if (!data) {
         return res.status(401).json({ message: "Data is not found !!!" });
       }
-      return res.status(201).json({ success: data });
+      return res.status(200).json({ success: data });
     } catch (error) {
       return res.status(500).json({ error: "Internal server error !!!" });
     }

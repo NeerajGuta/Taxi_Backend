@@ -131,7 +131,8 @@ class Authentication {
 
   async updateProfile(req, res) {
     try {
-      let { userId, name, email, address, profileimage } = req.body;
+      let { userId, name, email, address } = req.body;
+      console.log(userId, name, email, address);
       let Obj = {};
 
       if (name) {

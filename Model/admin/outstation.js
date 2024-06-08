@@ -5,6 +5,9 @@ const outStationSchema = mongoose.Schema(
     vehicleType: {
       type: String,
     },
+    triptype: {
+      type: String,
+    },
     vehicleImage: {
       type: String,
     },

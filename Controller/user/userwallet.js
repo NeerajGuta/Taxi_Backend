@@ -1,9 +1,9 @@
+const { json } = require("express");
 const userwalletModel = require("../../Model/user/userwallet");
 
 class userWallet {
   async postaddcustomerwallet(req, res) {
-    const { userId, amount } = req.body;
-
+    const { userId, amount, paymentId } = req.body;
     if (!amount || isNaN(amount)) {
       return res.status(400).json({ error: "Enter a valid Amount" });
     }
@@ -21,6 +21,7 @@ class userWallet {
           amount: amountNumber,
           type: "credit",
           balanceAfterTransaction: updatedAmount,
+          paymentId,
         });
 
         customer.amount = updatedAmount;
@@ -37,6 +38,7 @@ class userWallet {
               amount: amountNumber,
               type: "credit",
               balanceAfterTransaction: amountNumber,
+              paymentId,
             },
           ],
         });
@@ -60,11 +62,11 @@ class userWallet {
   async getcustomerwalletamount(req, res) {
     let id = req.params.id;
     try {
-      let customerwallet = await userwalletModel.findOne({ _id: id });
+      let customerwallet = await userwalletModel.findOne({ userId: id });
       if (customerwallet) {
-        return res.json({ customerwallet: customerwallet });
+        return res.status(200).json({ success: customerwallet });
       } else {
-        return res.json({ customerwallet: { amount: 0 } });
+        return res.status(500).json({ customerwallet: { amount: 0 } });
       }
     } catch (err) {
       console.log(err);

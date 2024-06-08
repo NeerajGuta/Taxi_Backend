@@ -124,7 +124,7 @@ class driverAuthentication {
       if (!data) {
         return res.status(401).json({ message: "Data is not found" });
       }
-      return res.status(201).json({ success: data });
+      return res.status(200).json({ success: data });
     } catch (error) {
       return res.status(500).json({ error: "enternal server error !!!" });
     }
